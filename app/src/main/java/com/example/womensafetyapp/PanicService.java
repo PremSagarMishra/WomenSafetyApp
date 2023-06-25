@@ -44,6 +44,7 @@ public class PanicService {
         relativesDB = new DatabaseHelper(context);
         isServiceRunning = false;
         sharedPreferences = context.getSharedPreferences("setting", Context.MODE_PRIVATE);
+        editor=sharedPreferences.edit();
 
         // Retrieve the stored values from SharedPreferences
         message = sharedPreferences.getString("message", "Hey, your relative is in danger!");
@@ -53,6 +54,9 @@ public class PanicService {
         executorService = Executors.newSingleThreadExecutor();
     }
 
+    public boolean isPanicServiceRunning() {
+        return isServiceRunning;
+    }
     public void startPanicService() {
         if (isServiceRunning) {
             showToast("Service is already running");
@@ -106,6 +110,8 @@ public class PanicService {
             }
         };
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+        editor.putBoolean("isServiceRunning",true);
+        editor.apply();
     }
 
     public void stopPanicService() {
@@ -118,6 +124,8 @@ public class PanicService {
             // Stop getting location updates
             locationManager.removeUpdates(locationListener);
             isServiceRunning = false;
+            editor.putBoolean("isServiceRunning",false);
+            editor.apply();
             showToast("Panic Service stopped");
         } else {
             showToast("Panic Service is not running");

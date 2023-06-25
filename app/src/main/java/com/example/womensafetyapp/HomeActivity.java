@@ -30,7 +30,10 @@ import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.IOException;
@@ -40,6 +43,7 @@ public class HomeActivity extends AppCompatActivity {
     private LocationListener locationListener;
     private double latitude;
     private double longitude;
+    private PanicService panicService;
 
     private static final String KEY_SERVICE_RUNNING = "service_running";
 
@@ -48,6 +52,16 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        // Create an instance of PanicService
+        panicService = new PanicService(getApplicationContext());
+        TextView panicmodetext=findViewById(R.id.panicmodetext);
+        SharedPreferences sharedPreferences = getSharedPreferences("setting", Context.MODE_PRIVATE);
+        if(!sharedPreferences.getBoolean("isServiceRunning",false)){
+            panicmodetext.setText("Start Panic Mode");
+        }
+        else {
+            panicmodetext.setText("Stop Panic Mode");
+        }
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         preferences.edit().putBoolean(KEY_SERVICE_RUNNING, false).apply();
         // Inside your onCreate() method or wherever you initialize your location-related functionality
@@ -120,6 +134,18 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(new Intent(HomeActivity.this,ProfileActivity.class));
             }
         });
+        findViewById(R.id.panicmode).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (panicmodetext.getText().equals("Start Panic Mode")) {
+                    panicService.startPanicService();
+                    panicmodetext.setText("Stop Panic Mode");
+                } else {
+                    panicService.stopPanicService();
+                    panicmodetext.setText("Start Panic Mode");
+                }
+            }
+        });
 
         findViewById(R.id.mylocation).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -189,7 +215,7 @@ public class HomeActivity extends AppCompatActivity {
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
         notificationManager.notify(notificationId, builder.build());
 
-        ButtonClickReceiver receiver = new ButtonClickReceiver();
+        ButtonClickReceiver receiver = new ButtonClickReceiver(panicService);
         IntentFilter filter = new IntentFilter();
         filter.addAction("BUTTON_1_ACTION");
         filter.addAction("BUTTON_2_ACTION");
@@ -215,30 +241,36 @@ public class HomeActivity extends AppCompatActivity {
 
 
 class ButtonClickReceiver extends BroadcastReceiver {
+    private PanicService panicService;
+
+    public ButtonClickReceiver(PanicService panicService) {
+        this.panicService = panicService;
+    }
 
     @Override
-
     public void onReceive(Context context, Intent intent) {
-
-        PanicService p1=new PanicService(context.getApplicationContext());
-
-
         if (intent.getAction() != null) {
             if (intent.getAction().equals("BUTTON_1_ACTION")) {
                 // Handle Button 1 click
-          p1.startPanicService();
-
-
+                if (!panicService.isPanicServiceRunning()) {
+                    panicService.startPanicService();
+                    updatePanicModeText(context, true);
+                }
             } else if (intent.getAction().equals("BUTTON_2_ACTION")) {
                 // Handle Button 2 click
-                // To stop sending location updates
-                p1.stopPanicService();
-
-
+                if (panicService.isPanicServiceRunning()) {
+                    panicService.stopPanicService();
+                    updatePanicModeText(context, false);
+                }
             }
         }
+    }
 
+    private void updatePanicModeText(Context context, boolean isServiceRunning) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("setting", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean("isServiceRunning", isServiceRunning);
+        editor.apply();
     }
 }
-
 
