@@ -121,19 +121,6 @@ public class Login extends AppCompatActivity {
         PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, otp);
         signInWithPhoneAuthCredential(credential);
 
-        //Storing username and contact number for further app use to shared prefrences
-
-        SharedPreferences sharedPreferences = getSharedPreferences("userData", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("username", nameEditText.getText().toString());
-        editor.putString("phonenumber", mobileNoEditText.getText().toString());
-        editor.apply();
-
-        //redirecting to main page
-        Intent intent=new Intent(getApplicationContext(),HomeActivity.class);
-        startActivity(intent);
-        finish();
-
     }
 
     private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
@@ -144,6 +131,18 @@ public class Login extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Phone authentication successful, proceed with your app logic
                             Toast.makeText(Login.this, "Phone authentication successful", Toast.LENGTH_SHORT).show();
+                            //Storing username and contact number for further app use to shared prefrences
+
+                            SharedPreferences sharedPreferences = getSharedPreferences("userData", Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putString("username", nameEditText.getText().toString());
+                            editor.putString("phonenumber", mobileNoEditText.getText().toString());
+                            editor.apply();
+
+                            //redirecting to main page
+                            Intent intent=new Intent(getApplicationContext(),HomeActivity.class);
+                            startActivity(intent);
+                            finish();
                         } else {
                             // Phone authentication failed
                             Toast.makeText(Login.this, "Phone authentication failed", Toast.LENGTH_SHORT).show();

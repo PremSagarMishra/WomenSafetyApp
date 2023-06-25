@@ -3,22 +3,37 @@ package com.example.womensafetyapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.ActivityNotFoundException;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
+
+import java.io.File;
+import java.io.IOException;
 
 public class HomeActivity extends AppCompatActivity {
     private LocationManager locationManager;
@@ -26,11 +41,15 @@ public class HomeActivity extends AppCompatActivity {
     private double latitude;
     private double longitude;
 
+    private static final String KEY_SERVICE_RUNNING = "service_running";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        preferences.edit().putBoolean(KEY_SERVICE_RUNNING, false).apply();
         // Inside your onCreate() method or wherever you initialize your location-related functionality
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
@@ -86,6 +105,22 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+
+        findViewById(R.id.panicmodesetting).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), PanicSettingActivity.class));
+            }
+        });
+
+
+        findViewById(R.id.profile).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(HomeActivity.this,ProfileActivity.class));
+            }
+        });
+
         findViewById(R.id.mylocation).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -128,10 +163,82 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+        //notification
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel("your_channel_id",
+                    "Channel Name",
+                    NotificationManager.IMPORTANCE_HIGH);
+            channel.setDescription("Channel Description");
+            channel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "your_channel_id")
+                .setSmallIcon(R.drawable.location)
+                .setContentTitle("Women Safety App")
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                .setOngoing(true) // Keeps the notification ongoing
+                .addAction(R.drawable.panicmode, "Panic Mode", createButton1PendingIntent()) // Button 1
+                .addAction(R.drawable.location, "Stop Panic Mode", createButton2PendingIntent()); // Button 2
+
+        int notificationId = 1; // Unique identifier for the notification
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        notificationManager.notify(notificationId, builder.build());
+
+        ButtonClickReceiver receiver = new ButtonClickReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("BUTTON_1_ACTION");
+        filter.addAction("BUTTON_2_ACTION");
+        registerReceiver(receiver, filter);
 
 
+
+    }
+    private PendingIntent createButton1PendingIntent() {
+        Intent button1Intent = new Intent("BUTTON_1_ACTION");
+        PendingIntent button1PendingIntent = PendingIntent.getBroadcast(this, 0, button1Intent, 0);
+        return button1PendingIntent;
+    }
+
+    private PendingIntent createButton2PendingIntent() {
+        Intent button2Intent = new Intent("BUTTON_2_ACTION");
+        PendingIntent button2PendingIntent = PendingIntent.getBroadcast(this, 0, button2Intent, 0);
+        return button2PendingIntent;
     }
 
 
 }
+
+
+class ButtonClickReceiver extends BroadcastReceiver {
+
+    @Override
+
+    public void onReceive(Context context, Intent intent) {
+
+        PanicService p1=new PanicService(context.getApplicationContext());
+
+
+        if (intent.getAction() != null) {
+            if (intent.getAction().equals("BUTTON_1_ACTION")) {
+                // Handle Button 1 click
+          p1.startPanicService();
+
+
+            } else if (intent.getAction().equals("BUTTON_2_ACTION")) {
+                // Handle Button 2 click
+                // To stop sending location updates
+                p1.stopPanicService();
+
+
+            }
+        }
+
+    }
+}
+
 

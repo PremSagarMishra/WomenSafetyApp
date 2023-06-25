@@ -16,7 +16,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Get the SharedPreferences object
         SharedPreferences sharedPreferences = getSharedPreferences("userData", Context.MODE_PRIVATE);
-
         // Check if a particular key exists
         boolean containsName = sharedPreferences.contains("username");
         boolean containsPhoneNumber = sharedPreferences.contains("phonenumber");

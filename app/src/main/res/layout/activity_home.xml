@@ -207,76 +207,8 @@
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>
-            <!--Card 6: Nearest Hospital-->
-            <androidx.cardview.widget.CardView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_rowWeight="1"
-                android:layout_columnWeight="1"
-                android:layout_margin="8dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp"
-                android:background="@android:color/white">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:id="@+id/nearestpolice"
-                    android:padding="16dp">
 
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="150dp"
-                        android:src="@drawable/policestation" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Nearest Police Station"
-                        android:textStyle="bold"
-                        android:textAlignment="center"
-                        android:textSize="20dp"
-                        android:layout_marginTop="10dp"
-                        />
-
-                </LinearLayout>
-
-            </androidx.cardview.widget.CardView>
-            <!--Card 7: Nearest Police-->
-            <androidx.cardview.widget.CardView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_rowWeight="1"
-                android:layout_columnWeight="1"
-                android:layout_margin="8dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp"
-                android:background="@android:color/white">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:id="@+id/nearesthospital"
-                    android:padding="16dp">
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="150dp"
-                        android:src="@drawable/hospital" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Nearest Hospital"
-                        android:textStyle="bold"
-                        android:textAlignment="center"
-                        android:textSize="20dp"
-                        android:layout_marginTop="10dp"
-                        />
-
-                </LinearLayout>
-
-            </androidx.cardview.widget.CardView>
             <!--Card 8: Profile-->
             <androidx.cardview.widget.CardView
                 android:layout_width="0dp"

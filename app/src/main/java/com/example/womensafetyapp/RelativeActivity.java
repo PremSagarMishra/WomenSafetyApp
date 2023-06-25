@@ -213,12 +213,15 @@ public class RelativeActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == MY_PERMISSIONS_REQUEST_SEND_SMS) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                sendSMSInternal(phonenum, "Hey "+sharedPreferences.getString("username","")+" added you to their relative list in women safety app");
+                // Permission granted, send the SMS
+                sendSMSInternal(phonenum, "Hey " + sharedPreferences.getString("username", "") + " added you to their relative list in the women safety app");
             } else {
+                // Permission denied
                 Toast.makeText(this, "SMS permission denied", Toast.LENGTH_SHORT).show();
             }
         }
     }
+
 
     private void sendSMSInternal(String phoneNumber, String message) {
         try {

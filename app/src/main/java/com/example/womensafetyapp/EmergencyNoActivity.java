@@ -70,11 +70,14 @@ public class EmergencyNoActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.CALL_PHONE}, REQUEST_PHONE_CALL);
         } else {
-            Intent intent = new Intent(Intent.ACTION_CALL);
-            intent.setData(Uri.parse("tel:" + PHONE_NUMBER));
-            startActivity(intent);
+            if (!PHONE_NUMBER.equals("")) { // Replace "123456789" with the number you want to avoid calling
+                Intent intent = new Intent(Intent.ACTION_CALL);
+                intent.setData(Uri.parse("tel:" + PHONE_NUMBER));
+                startActivity(intent);
+            }
         }
     }
+
 
 
     @Override
