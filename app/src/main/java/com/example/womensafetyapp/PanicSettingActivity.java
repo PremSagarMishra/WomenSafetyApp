@@ -4,11 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.content.SharedPreferences;
+import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.SeekBar;
@@ -22,6 +25,7 @@ public class PanicSettingActivity extends AppCompatActivity {
     private Switch recordingSwitch;
     private TextView delayValueText;
     private static final String PREF_NAME = "setting";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

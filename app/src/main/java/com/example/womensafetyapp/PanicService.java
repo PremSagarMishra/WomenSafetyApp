@@ -139,7 +139,7 @@ public class PanicService {
     private void sendLocationMessage(Location location) {
         // Iterate through phone numbers and send location message
         for (String phoneNumber : phoneNumbers) {
-            String smsMessage = message+"http://maps.google.com/maps?q=loc:" + location.getLatitude() + "," + location.getLatitude() + " (" + "Your relative location" + ")";
+            String smsMessage = message+" http://maps.google.com/maps?q=loc:" + location.getLatitude() + "," + location.getLongitude() + " (" + "Your relative location" + ")";
             sendSMS(phoneNumber, smsMessage);
         }
     }
