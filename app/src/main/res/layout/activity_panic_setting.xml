@@ -38,7 +38,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/delayLabel"
-        android:max="10" />
+        android:layout_marginTop="-2dp"/>
 
     <TextView
         android:id="@+id/delayValueText"
@@ -46,24 +46,20 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/delaySeekBar"
         android:layout_alignParentEnd="true"
-        android:text="0"
+        android:text="30"
         android:textSize="16sp" />
 
+    <View
+        android:layout_width="match_parent"
+        android:id="@+id/view1"
+        android:layout_height="2dp"
+        android:background="@color/black"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/delayValueText"/>
     <TextView
-        android:id="@+id/recordingLabel"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/delayValueText"
-        android:layout_marginTop="16dp"
-        android:text="Video Recording"
-        android:textSize="18sp"
-        android:textStyle="bold" />
-
-    <Switch
-        android:id="@+id/recordingSwitch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/recordingLabel"
-        android:layout_alignParentEnd="true" />
-
+        android:layout_below="@id/view1"
+        android:textSize="16dp"
+        android:text="Note:Restart the app to see the changes"/>
 </RelativeLayout>

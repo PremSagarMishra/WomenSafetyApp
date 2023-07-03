@@ -48,7 +48,7 @@ public class PanicService {
 
         // Retrieve the stored values from SharedPreferences
         message = sharedPreferences.getString("message", "Hey, your relative is in danger!");
-        delay = sharedPreferences.getInt("delay", 0);
+        delay = sharedPreferences.getInt("delay", 30);
         recording = sharedPreferences.getBoolean("recording", false);
 
         executorService = Executors.newSingleThreadExecutor();

@@ -173,14 +173,13 @@ public class HomeActivity extends AppCompatActivity {
                             latitude = lastKnownLocation.getLatitude();
                             longitude = lastKnownLocation.getLongitude();
 
-                            // Do something with the latitude and longitude values
-                            // For example, display them on the UI or use them for further processing
-                            String strUri = "http://maps.google.com/maps?q=loc:" + latitude + "," + longitude + " (" + "Your location" + ")";
-                            Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(strUri));
-
-                            intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
-
-                            startActivity(intent);
+                            Uri mapUri = Uri.parse("geo:0,0?q="+latitude+","+longitude+"(Your Location)");
+                            Intent mapIntent = new Intent(Intent.ACTION_VIEW, mapUri);
+                            mapIntent.setPackage("com.google.android.apps.maps");
+                            startActivity(mapIntent);
+                        }
+                        else{
+                            Toast.makeText(HomeActivity.this, "Location not found yetfi", Toast.LENGTH_SHORT).show();
                         }
                     } else {
                         // Request the permission if not granted

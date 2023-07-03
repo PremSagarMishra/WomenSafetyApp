@@ -22,7 +22,6 @@ public class PanicSettingActivity extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
     private EditText messageEditText;
     private SeekBar delaySeekBar;
-    private Switch recordingSwitch;
     private TextView delayValueText;
     private static final String PREF_NAME = "setting";
 
@@ -38,7 +37,6 @@ public class PanicSettingActivity extends AppCompatActivity {
         // Initialize views
         messageEditText = findViewById(R.id.messageEditText);
         delaySeekBar = findViewById(R.id.delaySeekBar);
-        recordingSwitch = findViewById(R.id.recordingSwitch);
         delayValueText = findViewById(R.id.delayValueText);
 
         // Retrieve stored values from SharedPreferences
@@ -50,7 +48,6 @@ public class PanicSettingActivity extends AppCompatActivity {
         messageEditText.setText(storedMessage);
         delaySeekBar.setProgress(storedDelay);
         delayValueText.setText(String.valueOf(storedDelay));
-        recordingSwitch.setChecked(storedRecording);
 
         // Set default message if no message is set
         if (storedMessage.isEmpty()) {
@@ -85,14 +82,6 @@ public class PanicSettingActivity extends AppCompatActivity {
             }
         });
 
-        // Set listener for recording switch
-        recordingSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                // Store recording value in SharedPreferences
-                sharedPreferences.edit().putBoolean("recording", isChecked).apply();
-            }
-        });
 
         // Set listener for messageEditText
         messageEditText.addTextChangedListener(new TextWatcher() {

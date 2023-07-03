@@ -33,9 +33,6 @@
             android:name=".PanicSettingActivity"
             android:exported="false" />
         <activity
-            android:name=".PanicActivity"
-            android:exported="false" />
-        <activity
             android:name=".RelativeActivity"
             android:exported="false" />
         <activity
