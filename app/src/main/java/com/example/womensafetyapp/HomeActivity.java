@@ -179,7 +179,7 @@ public class HomeActivity extends AppCompatActivity {
                             startActivity(mapIntent);
                         }
                         else{
-                            Toast.makeText(HomeActivity.this, "Location not found yetfi", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(HomeActivity.this, "Location not found yet", Toast.LENGTH_SHORT).show();
                         }
                     } else {
                         // Request the permission if not granted
