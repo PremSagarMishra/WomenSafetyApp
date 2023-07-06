@@ -1,5 +1,6 @@
 package com.example.womensafetyapp;
 
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -26,10 +27,12 @@ import java.util.concurrent.TimeUnit;
 
 public class Login extends AppCompatActivity {
     private EditText mobileNoEditText;
+
     private EditText nameEditText;
     private CheckBox termCheckBox;
     private EditText otpEditText;
     private TextView sendOtpButton;
+    private TextView backupbutton;
     private Button signUpButton;
 
     private FirebaseAuth firebaseAuth;
@@ -51,6 +54,25 @@ public class Login extends AppCompatActivity {
         otpEditText = findViewById(R.id.otp);
         sendOtpButton = findViewById(R.id.sendotpbutton);
         signUpButton = findViewById(R.id.signup);
+        backupbutton=findViewById(R.id.backup);
+
+
+        backupbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //if otp dont work because of limit issue this can be used to signup to the app
+                SharedPreferences sharedPreferences = getSharedPreferences("userData", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("username", nameEditText.getText().toString());
+                editor.putString("phonenumber", mobileNoEditText.getText().toString());
+                editor.apply();
+
+                //redirecting to main page
+                Intent intent=new Intent(getApplicationContext(),HomeActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
         // Set click listener for the "Send Otp" button
         sendOtpButton.setOnClickListener(new View.OnClickListener() {
