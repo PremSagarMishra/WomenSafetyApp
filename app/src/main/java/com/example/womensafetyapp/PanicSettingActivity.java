@@ -14,6 +14,8 @@ import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -25,7 +27,8 @@ public class PanicSettingActivity extends AppCompatActivity {
     private TextView delayValueText;
     private static final String PREF_NAME = "setting";
 
-
+    private RadioButton voiceRecordRadioButton;
+    private RadioButton sendLocationRadioButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,9 +42,13 @@ public class PanicSettingActivity extends AppCompatActivity {
         delaySeekBar = findViewById(R.id.delaySeekBar);
         delayValueText = findViewById(R.id.delayValueText);
 
+        // Initialize radio buttons
+        voiceRecordRadioButton = findViewById(R.id.voiceRecordRadioButton);
+        sendLocationRadioButton = findViewById(R.id.sendLocationRadioButton);
+
         // Retrieve stored values from SharedPreferences
         String storedMessage = sharedPreferences.getString("message", "");
-        int storedDelay = sharedPreferences.getInt("delay", 0);
+        int storedDelay = sharedPreferences.getInt("delay", 30);
         boolean storedRecording = sharedPreferences.getBoolean("recording", false);
 
         // Update UI with stored values
@@ -102,5 +109,27 @@ public class PanicSettingActivity extends AppCompatActivity {
                 // Do nothing
             }
         });
+        // Set listener for radio buttons
+        RadioGroup optionsRadioGroup = findViewById(R.id.optionsRadioGroup);
+        optionsRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                // Store the selected panic option in SharedPreferences
+                if (checkedId == R.id.voiceRecordRadioButton) {
+                    sharedPreferences.edit().putString("panicoption", "voiceRecord").apply();
+                } else if (checkedId == R.id.sendLocationRadioButton) {
+                    sharedPreferences.edit().putString("panicoption", "sendLocation").apply();
+                }
+            }
+        });
+
+        // Retrieve the stored panic option from SharedPreferences
+        String storedPanicOption = sharedPreferences.getString("panicoption", "voiceRecord");
+        if (storedPanicOption.equals("voiceRecord")) {
+            voiceRecordRadioButton.setChecked(true);
+        } else if (storedPanicOption.equals("sendLocation")) {
+            sendLocationRadioButton.setChecked(true);
+        }
     }
+
 }

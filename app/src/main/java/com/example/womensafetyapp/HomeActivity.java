@@ -52,22 +52,28 @@ public class HomeActivity extends AppCompatActivity {
     private PanicService panicService;
 
     private static final String KEY_SERVICE_RUNNING = "service_running";
-
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
     private boolean isRecording = false;
     private MediaRecorder mediaRecorder;
     private static String recordFile = null;
     private static final String LOG_TAG = "AudioRecording";
     public static final int REQUEST_AUDIO_PERMISSION_CODE = 1;
+    private String storedPanicOption;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
         // Create an instance of PanicService
         panicService = new PanicService(getApplicationContext());
         TextView panicmodetext = findViewById(R.id.panicmodetext);
         SharedPreferences sharedPreferences = getSharedPreferences("setting", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        storedPanicOption = sharedPreferences.getString("panicoption", "voiceRecord");
+        editor.putBoolean("isServiceRunning",false);
+        editor.apply();
+
         if (!sharedPreferences.getBoolean("isServiceRunning", false)) {
             panicmodetext.setText("Start Panic Mode");
         } else {
@@ -146,12 +152,25 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (panicmodetext.getText().equals("Start Panic Mode")) {
-                    panicService.startPanicService();
-                    startRecording();
+
+                    if(storedPanicOption.equalsIgnoreCase("voiceRecord")){
+                        startRecording();
+                        Toast.makeText(HomeActivity.this, "Voice recording", Toast.LENGTH_SHORT).show();
+                    }
+                    else{
+                        panicService.startPanicService();
+                        Toast.makeText(HomeActivity.this, "Sms location feature", Toast.LENGTH_SHORT).show();
+                    }
                     panicmodetext.setText("Stop Panic Mode");
                 } else {
-                    panicService.stopPanicService();
-                    stopRecording();
+                    if(storedPanicOption.equalsIgnoreCase("voiceRecord")){
+                        stopRecording();
+                        Toast.makeText(HomeActivity.this, "Voice recording stopped", Toast.LENGTH_SHORT).show();
+                    }
+                    else{
+                        panicService.stopPanicService();
+                        Toast.makeText(HomeActivity.this, "Sms location feature stopped", Toast.LENGTH_SHORT).show();
+                    }
                     panicmodetext.setText("Start Panic Mode");
                 }
             }
