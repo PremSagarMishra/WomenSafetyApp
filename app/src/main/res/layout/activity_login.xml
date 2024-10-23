@@ -50,34 +50,6 @@
         android:layout_marginRight="20dp"
         />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/sendotpbutton"
-        android:paddingRight="25dp"
-        android:text="Send Otp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:textSize="16dp"
-        android:textColor="@color/green"
-        android:textAlignment="textEnd"
-        />
-
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Otp"
-        android:id="@+id/otp"
-        android:inputType="phone"
-        android:maxLength="10"
-        android:textColor="@color/text_color_secondary"
-        android:background="@drawable/inputfielddesign"
-        android:padding="15dp"
-        android:textAlignment="center"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        />
 
     <CheckBox
         android:layout_width="match_parent"
